@@ -61,14 +61,15 @@
   ;; On dit à Tailwind de s'activer sur Blade et Twig
   (setq lsp-tailwindcss-major-modes '(web-mode php-mode html-mode css-mode)))
 
-;; PHP & Laravel Artisan
+;; PHP Mode (Base)
 (use-package php-mode :mode "\\.php\\'")
-(use-package laravel-mode
-  :hook (php-mode . laravel-mode)
-  :bind (:map laravel-mode-map ("C-c a" . laravel-artisan-call)))
 
-;; Symfony Navigation
-(use-package symfony-mode :hook (php-mode . symfony-mode))
+;; Optional: Quick Framework Commands (No extra packages needed)
+;; You can use M-x compile (or C-c c) to run artisan/console commands
+(add-hook 'php-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-c a") (lambda () (interactive) (compile "php artisan ")))
+            (local-set-key (kbd "C-c s") (lambda () (interactive) (compile "php bin/console ")))))
 
 ;; Templates (Twig & Blade)
 (use-package web-mode
