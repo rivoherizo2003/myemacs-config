@@ -1,1 +1,0 @@
-("~/workspace/voafafi-dockerized/" "~/workspace/training-init-devweb/")
