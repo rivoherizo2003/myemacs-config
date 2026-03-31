@@ -1,275 +1,117 @@
-# 🚀 MyEmacs Config - Professional Emacs Setup
+# 🚀 MyEmacs Config - Professional Polyglot Setup
 
-## Overview
-A modern, performant Emacs configuration optimized for web development, Flutter/Dart, PHP, and polyglot development. Built with LSP support, Tree-sitter syntax highlighting, and bleeding-edge development tools.
-
-## ✨ Features
-
-- **LSP Integration** - Full Language Server Protocol support for intelligent code completion and diagnostics
-- **Tree-sitter Support** - Modern syntax highlighting for TypeScript, JavaScript, Bash
-- **Multi-Language Support** - HTML/CSS, JavaScript/TypeScript, PHP, Dart/Flutter, YAML, SQL, Bash, Java
-- **Git Integration** - Magit for powerful Git workflow management
-- **Project Management** - Projectile for seamless project navigation
-- **Code Completion** - Company mode with smart autocompletion
-- **Modern UI** - Doom themes and modeline for a contemporary look
-- **Performance Optimized** - Tuned for fast startup and responsive editing
-
-## 📋 System Requirements
-
-- **Emacs 29+** (recommended for native Tree-sitter support)
-- **Git** - For version control integration
-- **Language Servers** - For LSP features (installed on-demand)
-- **macOS, Linux, or Windows with WSL2**
-
-## 🔧 Installation
-
-### Step 1: Install Emacs
-
-#### macOS
-```bash
-# Using Homebrew
-brew install emacs
-
-# For GUI version with better support
-brew install --with-cocoa emacs
-```
-
-#### Linux (Ubuntu/Debian)
-```bash
-sudo apt-get update
-sudo apt-get install emacs emacs-el
-```
-
-#### Linux (Fedora/RHEL)
-```bash
-sudo dnf install emacs
-```
-
-#### Windows
-- Download from [GNU Emacs website](https://www.gnu.org/software/emacs/)
-- Or use Windows Subsystem for Linux (WSL2) with Linux instructions above
-
-### Step 2: Clone Configuration
-
-```bash
-# Navigate to your Emacs configuration directory
-cd ~/.config/emacs  # Linux/macOS
-# or
-cd ~\AppData\Roaming\.emacs.d  # Windows
-
-# Clone this repository
-git clone https://github.com/rivoherizo2003/myemacs-config.git .
-```
-
-### Step 3: Launch Emacs
-
-```bash
-emacs &
-```
-
-Emacs will automatically:
-1. Download and install all required packages from MELPA
-2. Compile configuration files
-3. Initialize LSP servers on first use of each language
-
-**Note:** First launch may take 2-3 minutes. Subsequent launches are fast.
-
-## 📖 Configuration Guide
-
-### File Structure
-```
-~/.config/emacs/
-├── init.el              # Main configuration file
-├── custom.el            # Auto-generated customizations
-├── projectile-bookmarks.eld  # Project bookmarks
-└── .gitignore          # Git ignore rules
-```
-
-### Customizing the Configuration
-
-#### Adding New Packages
-Edit `init.el` and add to the appropriate section:
-
-```emacs-lisp
-(use-package your-package-name
-  :hook (major-mode . your-package-name)
-  :config
-  (setq your-package-option t))
-```
-
-#### Changing the Theme
-Modify line 28 in init.el:
-```emacs-lisp
-(use-package doom-themes
-  :config (load-theme 'doom-dracula t))  ; Change 'doom-one' to other doom themes
-```
-
-Available themes: `doom-one`, `doom-dracula`, `doom-gruvbox`, `doom-monokai-pro`, etc.
-
-#### Adjusting Font Size
-Change line 25-26 in init.el (`:height` is in 1/10 of a point):
-```emacs-lisp
-(set-face-attribute 'default nil :height 120)  ; 12pt font
-```
-
-## ⌨️ Key Bindings
-
-| Keybinding | Command | Description |
-|---|---|---|
-| `C-c p` | Projectile | Project management prefix |
-| `C-c p f` | projectile-find-file | Find file in project |
-| `C-c p s r` | projectile-grep | Search in project |
-| `C-c l` | LSP Mode | LSP commands prefix |
-| `C-c l d` | lsp-find-definition | Jump to definition |
-| `C-c l r` | lsp-find-references | Find all references |
-| `C-c l n` | lsp-rename | Rename symbol |
-| `M-x magit-status` | Magit | Open Git status |
-| `C-x C-+` | Scale up | Increase font size |
-| `C-x C--` | Scale down | Decrease font size |
-
-## 🛠️ Supported Languages
-
-### Web Development
-- **HTML/CSS** - Web-mode with syntax highlighting
-- **JavaScript** - Tree-sitter + LSP
-- **TypeScript** - Tree-sitter + LSP
-
-### Mobile Development
-- **Dart/Flutter** - dart-mode + lsp-dart
-- **Java** - LSP support
-
-### Backend Development
-- **PHP** - php-mode + LSP
-- **SQL** - sql-indent + LSP
-- **YAML** - yaml-mode
-- **Bash** - bash-ts-mode (Tree-sitter)
-
-## 🚀 Setting Up Language Servers
-
-Language servers are installed automatically on first use. To manually install:
-
-### TypeScript/JavaScript
-```bash
-npm install -g typescript-language-server typescript
-```
-
-### Python
-```bash
-pip install pylsp python-lsp-server
-```
-
-### PHP
-```bash
-composer global require felixbecker/language-server
-```
-
-### Dart/Flutter
-Requires Dart SDK installation. Installation automatic with lsp-dart.
-
-## 🐛 Troubleshooting
-
-### LSP Not Working
-1. Check if language server is installed: `M-x lsp-describe-session`
-2. Enable LSP logging: Set `(setq lsp-log-io t)` temporarily in init.el
-3. View logs: `M-x lsp-log-io-next-line` or check `*lsp-log*` buffer
-
-### Slow Startup
-1. Disable LSP logging: `(setq lsp-log-io nil)`
-2. Disable unnecessary packages
-3. Increase `lsp-idle-delay` (currently 0.5 seconds)
-
-### Theme Not Loading
-```emacs-lisp
-M-x package-refresh-contents
-M-x package-install doom-themes
-```
-
-### Package Installation Errors
-```bash
-# Clear package cache
-rm -rf ~/.emacs.d/elpa/
-
-# Restart Emacs and let it reinstall
-emacs &
-```
-
-## 📚 Customization Tips
-
-### Disable Relative Line Numbers
-In init.el, change line 21:
-```emacs-lisp
-(setq display-line-numbers-type nil)  ; Use absolute line numbers
-```
-
-### Change Modeline
-Try other doom-modeline configurations or alternatives:
-- `mood-line` - Minimalist modeline
-- `telephone-line` - Modular modeline
-
-### Add Custom Keybindings
-Add to end of init.el:
-```emacs-lisp
-(global-set-key (kbd "C-c m") 'your-command)
-```
-
-## 📦 Dependencies Summary
-
-| Package | Purpose |
-|---------|---------|
-| use-package | Package management & configuration |
-| doom-themes | Modern color theme |
-| doom-modeline | Enhanced mode line |
-| magit | Git integration |
-| projectile | Project navigation |
-| lsp-mode | Language Server Protocol |
-| lsp-ui | LSP UI enhancements |
-| company | Code completion |
-| all-the-icons | Icon support |
-| which-key | Keybinding hints |
-
-## 🔄 Updating Configuration
-
-To pull latest updates:
-```bash
-cd ~/.config/emacs
-git pull origin main
-```
-
-Restart Emacs: `M-x restart-emacs` or restart the application.
-
-## ⚙️ Advanced Setup
-
-### Daemonize Emacs (Linux/macOS)
-For faster subsequent launches:
-```bash
-# Start daemon
-emacs --daemon
-
-# Connect to daemon
-emacsclient -c
-```
-
-### Windows Setup with WSL2
-1. Install WSL2: Follow [Microsoft's guide](https://docs.microsoft.com/en-us/windows/wsl/install)
-2. Install Emacs in WSL: `sudo apt install emacs`
-3. Install Emacs on Windows for GUI
-4. Configure `server-use-tcp` in init.el for WSL-Windows communication
-
-## 🤝 Contributing
-
-Feel free to fork this configuration and customize it for your workflow!
-
-## 📞 Support
-
-For issues or questions:
-1. Check [GNU Emacs Manual](https://www.gnu.org/software/emacs/manual/)
-2. Visit [Emacs Stack Exchange](https://emacs.stackexchange.com/)
-3. Check package documentation: `M-x describe-package`
-
-## 📄 License
-
-This configuration is provided as-is. Emacs is licensed under GNU General Public License v3.
+## 📋 Overview
+A modern, high-performance Emacs configuration optimized for Web Development (**Symfony 7.4**, **Laravel 13**, **Tailwind CSS**), **Flutter/Dart**, **Java**, and polyglot programming. Built on **Emacs 29+**, it leverages **LSP** and **Tree-sitter** for a premium IDE-like experience.
 
 ---
 
-**Happy Coding! 🎉**
+## ✨ Features
+- **LSP Integration** - Full Language Server Protocol support for intelligent completion and diagnostics.
+- **Modern UI** - Doom-One theme, enhanced Modeline, and native icon support (`all-the-icons`).
+- **Framework Ready** - Dedicated tooling for Symfony, Laravel (Artisan), and Tailwind CSS.
+- **Git Power** - Integrated Magit, the world’s best Git client.
+- **Performance** - Tuned for fast startup and responsive real-time editing.
+
+---
+
+## 🛠️ System Dependencies (Required)
+
+To enable code intelligence (LSP), you **must** install the following language servers on your system (**EndeavourOS / Arch**):
+
+### 1. Web & PHP (via NPM)
+```bash
+# Global installation of language servers
+npm install -g intelephense              # PHP Language Server
+npm install -g @tailwindcss/language-server # Tailwind CSS Support
+npm install -g typescript typescript-language-server # JS / TS Support
+```
+
+### 2. Java (via Pacman)
+```bash
+# JDK and build tools
+sudo pacman -S jdk-openjdk maven gradle
+```
+
+### 3. Flutter / Dart
+Install the official Flutter SDK. `lsp-dart` will handle the rest upon opening your first `.dart` file.
+
+---
+
+## 🐘 Framework Specific Setup
+
+### Laravel 13
+To enable autocomplete for Facades (`Route::`, `Auth::`), run this at the root of your Laravel projects:
+```bash
+composer require --dev barryvdh/laravel-ide-helper && php artisan ide-helper:generate
+```
+
+### Symfony 7.4
+`symfony-mode` activates automatically when a `composer.json` is detected. Use it to navigate quickly between your services, routes, and controllers.
+
+---
+
+## 📦 Installation & Setup
+
+1. **Clone the configuration:**
+   ```bash
+   git clone [https://github.com/rivoherizo2003/myemacs-config.git](https://github.com/rivoherizo2003/myemacs-config.git) ~/.emacs.d
+   ```
+
+2. **Launch Emacs:**
+   The first launch will automatically download all required packages (2-3 minutes).
+
+3. **Install Fonts (Crucial):**
+   Once the package installation is complete, run the following command within Emacs:
+   `M-x all-the-icons-install-fonts`
+
+---
+
+## ⌨️ Key Bindings (Cheatsheet)
+
+### 🚀 Navigation & Git
+| Shortcut | Action | Description |
+| :--- | :--- | :--- |
+| `C-c p` | **Projectile** | Project management menu (Find file, Switch project) |
+| `M-x magit-status` | **Magit** | Full-featured Git interface |
+| `M-x vterm` | **Terminal** | Ultra-fast embedded terminal |
+| `C-x C-+ / -` | **Zoom** | Increase / Decrease font size |
+
+### 💻 LSP & Code Intelligence (PHP, JS, Java)
+| Shortcut | Action | Description |
+| :--- | :--- | :--- |
+| `C-c l` | **LSP Menu** | Prefix for all LSP commands |
+| `C-c l d` | `find-definition` | Jump to source code |
+| `C-c l r` | `find-references` | Find all usages in project |
+| `C-c l n` | `lsp-rename` | Rename symbol across all files |
+| `C-c l a a` | `code-actions` | Quick fixes (Imports, Getters/Setters) |
+
+### 🛠️ Framework Tooling
+| Shortcut | Action | Context |
+| :--- | :--- | :--- |
+| `C-c a` | `laravel-artisan` | Laravel Artisan command menu |
+| `C-c c c` | `composer-install`| Install PHP dependencies |
+| `M-x symfony-mode` | `symfony-tools` | Symfony navigation tools |
+
+---
+
+## ☕ Java Workflow
+1. **Import**: When opening a Maven/Gradle project, accept the workspace import (`y`).
+2. **Dependencies**: Any change to `pom.xml` or `build.gradle` triggers an automatic re-index.
+3. **Getters/Setters**: Use `M-x lsp-java-generate-getters-setters` or Code Actions (`C-c l a a`).
+
+---
+
+## 🐛 Troubleshooting
+
+### LSP Not Starting?
+Check if the server is properly installed with `M-x lsp-describe-session`. Ensure that the binaries (`intelephense`, etc.) are in your `$PATH`.
+
+### Icons Missing?
+Don't forget to run `M-x all-the-icons-install-fonts`. On Linux, this downloads fonts to `~/.local/share/fonts`.
+
+### Performance Lag?
+If Emacs slows down in large Tailwind projects, adjust the index delay in your `init.el`:
+`(setq lsp-idle-delay 0.5)`
+
+---
+*Configured with ❤️ on **EndeavourOS**. Happy Coding! 🎉*
