@@ -84,6 +84,11 @@
 (use-package composer
   :bind (:map php-mode-map ("C-c c c" . composer-install)))
 
+;; Java
+(use-package lsp-java
+  :ensure t
+  :hook (java-mode . lsp-deferred))
+
 ;; --- 6. Tree-sitter (Emacs 29+) ---
 (setq major-mode-remap-alist
       '((typescript-mode . typescript-ts-mode)
