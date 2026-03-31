@@ -18,3 +18,12 @@ projectile.cache
 .projectile
 lsp-session-pcache
 lsp-savefile
+
+# Cache Projectile (liste des projets)
+.projectile
+projectile.cache
+
+# Cache LSP (très important pour ne pas polluer Git)
+.lsp-session-v1
+.emacs.desktop
+.emacs.desktop.lock
