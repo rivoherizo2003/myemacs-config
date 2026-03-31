@@ -18,3 +18,5 @@ url/
 backups/
 places
 recentf
+eln-cache/
+native-lisp/
