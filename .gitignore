@@ -10,6 +10,7 @@ straight/
 eln-cache/
 native-lisp/
 custom.el
+lsp-cache/
 
 # --- Packages spécifiques ---
 .python-environments/
