@@ -87,10 +87,7 @@ composer require --dev barryvdh/laravel-ide-helper && php artisan ide-helper:gen
 
 ### 🛠️ Framework Tooling
 | Shortcut | Action | Context |
-| :--- | :--- | :--- |
-| `C-c a` | `laravel-artisan` | Laravel Artisan command menu |
 | `C-c c c` | `composer-install`| Install PHP dependencies |
-| `M-x symfony-mode` | `symfony-tools` | Symfony navigation tools |
 
 ---
 
