@@ -1,22 +1,20 @@
-# Fichiers de sauvegarde d'Emacs
+# --- Emacs ---
 *~
 \#*\#
 .\#*
-
-# Dossiers créés par les packages (ex: elpa, straight)
-# Il vaut mieux laisser Emacs réinstaller les packages au démarrage
+*.elc
+auto-save-list/
+backups/
 elpa/
 straight/
-
-# Fichiers de personnalisation automatique
-# (Si tu utilises 'customize-set-variable')
-custom.el
-
-# Caches et états
-auto-save-list/
-url/
-backups/
-places
-recentf
 eln-cache/
 native-lisp/
+custom.el
+
+# --- Packages spécifiques ---
+.python-environments/
+node_modules/
+projectile.cache
+.projectile
+lsp-session-pcache
+lsp-savefile
