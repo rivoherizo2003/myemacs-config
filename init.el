@@ -1,5 +1,7 @@
 ;;; init.el --- Emacs Pro Config for EndeavourOS
-
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
 ;; --- 1. Gestion des paquets (MELPA) ---
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -102,3 +104,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq lsp-idle-delay 0.5)
+(setq lsp-log-io nil) ; Désactive les logs pour gagner en vitesse
+
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+(set-fringe-mode 10)       ; Ajoute une marge à gauche et à droite
+(setq-default line-spacing 0.1) ; Un peu d'air entre les lignes
+
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-doc-enable t)      ; Affiche la doc au survol
+  (setq lsp-ui-doc-position 'at-point)
+  (setq lsp-ui-sideline-enable t) ; Affiche les erreurs en bout de ligne
+  (setq lsp-ui-imenu-enable t))
