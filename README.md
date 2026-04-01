@@ -110,35 +110,18 @@ Don't forget to run `M-x all-the-icons-install-fonts`. On Linux, this downloads 
 If Emacs slows down in large Tailwind projects, adjust the index delay in your `init.el`:
 `(setq lsp-idle-delay 0.5)`
 
-### 🛠️ Fix : Erreur Tree-sitter avec PHPDoc sous Emacs 29+
+### 🚀 Reloading the configuration
 
-#### 📝 Le problème
-Après avoir configuré `php-ts-mode`, Emacs réclame la grammaire `phpdoc` pour analyser et colorer correctement les blocs de commentaires (ex: `/** @param ... */`). 
-Cependant, le dépôt officiel de Tree-sitter pour PHP contient à la fois les grammaires `php` et `phpdoc` dans des sous-dossiers distincts, et sur l'ancienne branche `master`. Emacs ne parvient pas à les trouver par défaut.
+Once the code is added to your configuration file, execute these steps in Emacs:
 
-#### ⚙️ La configuration (init.el)
-Il faut déclarer explicitement l'URL, la branche et le chemin du code source pour les deux grammaires. 
+1. **Reload the configuration:**
+   Save your file and type `M-x eval-buffer` (or simply restart Emacs).
+2. **Start the grammar installation:**
+   Type `M-x treesit-install-language-grammar` and press `Enter`.
+3. **Select the language:**
+   At the prompt at the bottom of the screen, type exactly `phpdoc` and press `Enter`.
 
-Ajoute ou mets à jour cette variable dans ton `init.el` (idéalement juste avant ta configuration Tree-sitter) :
-
-```elisp
-;; Définition précise des sources pour Tree-sitter (Branche master, sous-dossiers spécifiques)
-(setq treesit-language-source-alist
-  '((php "[https://github.com/tree-sitter/tree-sitter-php](https://github.com/tree-sitter/tree-sitter-php)" "master" "php/src")
-    (phpdoc "[https://github.com/tree-sitter/tree-sitter-php](https://github.com/tree-sitter/tree-sitter-php)" "master" "phpdoc/src")))
-```
-#### 🚀 L'installation finale
-
-Une fois le code ajouté à ton fichier de configuration, exécute ces étapes dans Emacs :
-
-1. **Recharger la configuration :**
-   Sauvegarde ton fichier et tape `M-x eval-buffer` (ou redémarre simplement Emacs).
-2. **Lancer l'installation de la grammaire :**
-   Tape `M-x treesit-install-language-grammar` et valide avec `Entrée`.
-3. **Sélectionner le langage :**
-   Au prompt en bas de l'écran, tape exactement `phpdoc` puis valide avec `Entrée`.
-
-> **✅ Résultat :** Emacs va cloner le dépôt et compiler la grammaire en arrière-plan. Retourne sur ton fichier PHP, fais un `M-x revert-buffer` pour le rafraîchir : les avertissements auront disparu et tes blocs de documentation bénéficieront d'une coloration syntaxique avancée !
+> **✅ Result:** Emacs will clone the repository and compile the grammar in the background. Go back to your PHP file, run `M-x revert-buffer` to refresh it: the warnings will have disappeared, and your documentation blocks will benefit from advanced syntax highlighting!
 
 
 *Configured with ❤️ on **EndeavourOS**. Happy Coding! 🎉*
