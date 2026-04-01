@@ -38,16 +38,24 @@
 (use-package lsp-mode
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((php-mode . lsp-deferred)
-         (php-ts-mode . lsp-deferred) ;;
+         (php-ts-mode . lsp-deferred)
          (web-mode . lsp-deferred)
-         (js-ts-mode . lsp)
-         (css-mode . lsp)
-         (yaml-mode . lsp))
+         (js-ts-mode . lsp-deferred) ;; deferred est mieux pour les perfs
+         (css-mode . lsp-deferred)
+         (yaml-mode . lsp-deferred))
   :config
   (setq lsp-php-server-any-version t)
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-idle-delay 0.5)
-  (add-to-list 'lsp-language-id-configuration '("\\.blade\\.php\\'" . "html")))
+  
+  ;; 🎨 FORCER LSP À LIRE BLADE ET TWIG COMME DU HTML
+  (add-to-list 'lsp-language-id-configuration '("\\.blade\\.php\\'" . "html"))
+  (add-to-list 'lsp-language-id-configuration '("\\.html\\.twig\\'" . "html"))
+
+  ;; 🛑 DIRE A LSP D'IGNORER LES GROS DOSSIERS SYMFONY/LARAVEL
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]var\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]node_modules\\'"))
 
 (use-package lsp-ui :hook (lsp-mode . lsp-ui-mode))
 
@@ -58,20 +66,17 @@
   :ensure t
   :init (setq lsp-tailwindcss-add-on-mode t)
   :config
-  ;; On dit à Tailwind de s'activer sur Blade et Twig
   (setq lsp-tailwindcss-major-modes '(web-mode php-mode html-mode css-mode)))
 
 ;; PHP Mode (Base)
 (use-package php-mode :mode "\\.php\\'")
 
-;; Optional: Quick Framework Commands (No extra packages needed)
-;; You can use M-x compile (or C-c c) to run artisan/console commands
+;; Optional: Quick Framework Commands
 (defun my-php-framework-commands ()
   "Ajoute les raccourcis Symfony/Laravel."
   (local-set-key (kbd "C-c a") (lambda () (interactive) (compile "php artisan ")))
   (local-set-key (kbd "C-c s") (lambda () (interactive) (compile "php bin/console "))))
 
-;; On attache la fonction aux DEUX modes pour être tranquille
 (add-hook 'php-mode-hook #'my-php-framework-commands)
 (add-hook 'php-ts-mode-hook #'my-php-framework-commands)
 
@@ -83,7 +88,9 @@
         '(("blade" . "\\.blade\\.php\\'")
           ("twig"  . "\\.html\\.twig\\'")))
   (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-enable-auto-quoting nil)) ;; Évite les conflits avec les directives Blade
+  (setq web-mode-enable-auto-quoting nil) ;; Évite conflits Blade
+  (setq web-mode-enable-auto-closing t)   ;; ✅ ACTIVE LA FERMETURE DES BALISES HTML
+  (setq web-mode-enable-auto-pairing t))  ;; ✅ ACTIVE LA FERMETURE DES {}, "", ()
 
 ;; Composer
 (use-package composer
