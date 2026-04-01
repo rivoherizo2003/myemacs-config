@@ -100,7 +100,7 @@
 ;; Corriger l'URL et la branche pour les grammaires PHP et PHPDoc
 (setq treesit-language-source-alist
   '((php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
-    (phpdoc "https://github.com/tree-sitter/tree-sitter-php" "master" "phpdoc/src")))
+    (phpdoc "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")))
 
 (use-package treesit-auto
   :ensure t
