@@ -38,6 +38,7 @@
 (use-package lsp-mode
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((php-mode . lsp-deferred)
+         (php-ts-mode . lsp-deferred) ;;
          (web-mode . lsp-deferred)
          (js-ts-mode . lsp)
          (css-mode . lsp)
@@ -46,7 +47,6 @@
   (setq lsp-php-server-any-version t)
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-idle-delay 0.5)
-  ;; Support de Tailwind via LSP
   (add-to-list 'lsp-language-id-configuration '("\\.blade\\.php\\'" . "html")))
 
 (use-package lsp-ui :hook (lsp-mode . lsp-ui-mode))
@@ -66,10 +66,14 @@
 
 ;; Optional: Quick Framework Commands (No extra packages needed)
 ;; You can use M-x compile (or C-c c) to run artisan/console commands
-(add-hook 'php-mode-hook
-          (lambda ()
-            (local-set-key (kbd "C-c a") (lambda () (interactive) (compile "php artisan ")))
-            (local-set-key (kbd "C-c s") (lambda () (interactive) (compile "php bin/console ")))))
+(defun my-php-framework-commands ()
+  "Ajoute les raccourcis Symfony/Laravel."
+  (local-set-key (kbd "C-c a") (lambda () (interactive) (compile "php artisan ")))
+  (local-set-key (kbd "C-c s") (lambda () (interactive) (compile "php bin/console "))))
+
+;; On attache la fonction aux DEUX modes pour être tranquille
+(add-hook 'php-mode-hook #'my-php-framework-commands)
+(add-hook 'php-ts-mode-hook #'my-php-framework-commands)
 
 ;; Templates (Twig & Blade)
 (use-package web-mode
@@ -91,6 +95,15 @@
   :hook (java-mode . lsp-deferred))
 
 ;; --- 6. Tree-sitter (Emacs 29+) ---
+;; Automatiser l'installation des grammaires manquantes
+(use-package treesit-auto
+  :ensure t
+  :custom
+  (treesit-auto-install 'prompt) ;; Met 't' à la place de 'prompt' si tu ne veux même pas qu'il te demande confirmation
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
 (setq major-mode-remap-alist
       '((typescript-mode . typescript-ts-mode)
         (js-mode . js-ts-mode)
