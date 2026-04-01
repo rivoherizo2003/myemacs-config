@@ -47,6 +47,9 @@
   (setq lsp-php-server-any-version t)
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-idle-delay 0.5)
+
+  (setq lsp-enable-indentation nil)
+  (setq lsp-enable-on-type-formatting nil)
   
   ;; 🎨 FORCER LSP À LIRE BLADE ET TWIG COMME DU HTML
   (add-to-list 'lsp-language-id-configuration '("\\.blade\\.php\\'" . "html"))
@@ -100,6 +103,29 @@
 (use-package lsp-java
   :ensure t
   :hook (java-mode . lsp-deferred))
+
+;; --- 7. Gestion de l'Indentation (Tabulations) ---
+
+;; 🚫 Désactiver les vraies tabulations au profit des espaces (La règle d'or)
+(setq-default indent-tabs-mode nil)
+
+;; 📏 Largeur globale par défaut
+(setq-default tab-width 4)
+(setq-default standard-indent 4)
+
+;; 🐘 Configuration PHP (Standard PSR-12 : 4 espaces)
+(setq c-basic-offset 4)
+(setq c-default-style "linux")
+
+;; 🎨 Configuration Web (JS & CSS : 2 espaces)
+(setq js-indent-level 2)
+(setq typescript-indent-level 2)
+(setq css-indent-offset 2)
+
+;; 🌐 Compléter ta config web-mode (pour le JS et CSS insérés dans le HTML/Blade)
+(with-eval-after-load 'web-mode
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
 
 ;; --- 6. Tree-sitter (Emacs 29+) ---
 ;; Automatiser l'installation des grammaires manquantes
