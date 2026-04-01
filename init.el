@@ -96,6 +96,11 @@
 
 ;; --- 6. Tree-sitter (Emacs 29+) ---
 ;; Automatiser l'installation des grammaires manquantes
+
+;; Corriger l'URL et la branche pour la grammaire PHP de Tree-sitter
+(setq treesit-language-source-alist
+  '((php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")))
+
 (use-package treesit-auto
   :ensure t
   :custom
