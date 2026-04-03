@@ -1,37 +1,50 @@
 ### 🔍 Searching & 📂 Opening Files
 
 * **`C-x C-f`** (`find-file`): Open or create a file (Native Emacs).
-* **`C-c p f`** (`projectile-find-file`): Search for a file anywhere inside your current project.
+* **`C-c p f`** (`projectile-find-file`): Search for a file by name across your entire project.
+* **`C-c p p`** (`projectile-switch-project`): **Switch Project** (Quickly jump between Laravel and Symfony projects).
 
-### 🔄 Switching Files (Buffers)
+### 🔄 Navigation & Buffers
 
-* **`C-x b`** (`switch-to-buffer`): Switch to a file that is already open in the background.
-* **`C-c p b`** (`projectile-switch-to-buffer`): Switch to an open file specifically belonging to your current project.
+* **`C-x b`** (`switch-to-buffer`): Switch to a file that is already open.
+* **`C-c p b`** (`projectile-switch-to-buffer`): Switch to an open file belonging to the current project.
+* **`C-x o`** (`other-window`): Jump the cursor to another window (if your screen is split).
 
 ### 🎯 Selecting & ❌ Deleting Lines
 
-* **`C-SPC` + `Down Arrow` (or `C-n`)**: **Select lines**. Set the mark with `C-SPC`, then move your cursor up or down to select multiple lines.
-* **`C-x h`** (`mark-whole-buffer`): Select the entire file at once.
-* **`C-k`** (`kill-line`): Delete everything from your cursor to the end of the line.
-* **`C-S-Backspace`** (`kill-whole-line`): **Delete the entire line**, regardless of where your cursor is positioned on it.
+* **`C-SPC` + `C-n` / `C-p`**: **Select text**. Set the mark with `C-SPC`, then move the cursor to highlight.
+* **`C-x h`**: Select the entire buffer/file.
+* **`C-k`**: Delete from the cursor position to the end of the line.
+* **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.
 
-### 📋 Copy and Paste
+### 📋 Copy & Paste (Kill Ring)
 
-*First, press **`C-SPC`** to set a marker and move your cursor to select text, then use:*
+* **`M-w`**: **Copy** the selection.
+* **`C-w`**: **Cut** the selection.
+* **`C-y`**: **Paste** (Yank).
+* **`M-y`**: **Paste History** (Use immediately after `C-y` to cycle through previous copies).
 
-* **`M-w`** (Alt + w): **Copy** the selected text.
-* **`C-w`** (Ctrl + w): **Cut** the selected text.
-* **`C-y`** (Ctrl + y): **Paste** (Yank) the text you just copied or cut.
-* **`M-y`** (Alt + y): **Paste History** (Press this immediately after `C-y` to cycle back through your clipboard history).
+### 🚀 Fast Navigation (LSP & Lines)
 
-### 🚀 Jumping to a Line (Relative & Absolute)
+* **`C-c l g`**: **Go to Definition**. Jump directly to the source of the class or method under the cursor.
+* **`M-g M-g`**: Jump to an absolute line number.
+* **`C-u [num] C-n/p`**: Relative jump (e.g., `C-u 10 C-n` to move 10 lines down).
 
-*Since you use relative line numbers, you have two powerful ways to navigate:*
+### 🐘 PHP & Frameworks (Custom Shortcuts)
 
-* **`C-u [number] C-n`** (or **`C-p`**): **Jump using relative numbers.** If you see the code you want to edit is 12 lines below, just type `C-u 12 C-n` (Down). If it's 8 lines above, type `C-u 8 C-p` (Up). *(Pro tip: You can also hold `Meta/Alt` and type the number, like `M-1 M-2 C-n`).*
-* **`M-g M-g`** (`goto-line`): **Jump to an absolute line number.** Emacs will ask you for the exact line number at the bottom of the screen.
+* **`C-c a`**: Run **PHP Artisan** (Laravel).
+* **`C-c s`**: Run **PHP bin/console** (Symfony).
+* **`C-c c c`**: Run **Composer Install** via the `composer` package.
 
-### 🪄 Formatting Code
+### 🪄 Code Intelligence (LSP)
 
-* **`M-x lsp-format-buffer`**: Format the entire file using your LSP server (e.g., Intelephense for PHP, Prettier for JS/CSS).
-* **`C-M-\`** (Ctrl + Alt + Backslash): Instantly fix the indentation and alignment of the currently selected block of code.
+* **`M-RET`**: **Quick Fix / Code Action**. Auto-import missing namespaces or fix errors.
+* **`C-c l r`**: **Rename**. Safely rename a variable or method across the entire project.
+* **`M-x lsp-format-buffer`**: Reformat the entire file based on standards (PSR-12, etc.).
+
+### 🌿 Git (Magit)
+
+* **`C-x g`**: Open the **Magit** status interface.
+* **`s`** (within Magit): Stage the file or change under the cursor.
+* **`c c`**: Create a commit.
+* **`P p`**: Push changes to the remote server.
