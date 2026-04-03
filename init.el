@@ -115,30 +115,49 @@
   :ensure t
   :hook (java-mode . lsp-deferred))
 
-;; --- 7. Gestion de l'Indentation (Tabulations) ---
+;; --- 7. Gestion de l'Indentation & Style Universel ---
 
-;; 🚫 Désactiver les vraies tabulations au profit des espaces (La règle d'or)
+;; 🚫 La règle d'or : Espaces au lieu de Tabulations
 (setq-default indent-tabs-mode nil)
-
-;; 📏 Largeur globale par défaut
 (setq-default tab-width 4)
-(setq-default standard-indent 4)
 
-;; 🐘 Configuration PHP (Standard PSR-12 : 4 espaces)
-(setq c-basic-offset 4)
-(setq c-default-style "linux")
+;; 📐 Fonction de style "Moderne" (Accolades alignées verticalement)
+(defun my-modern-indent-style ()
+  (setq c-basic-offset 4)
+  (c-set-style "java") ;; Style de base plus propre que "linux"
+  ;; Force l'alignement des { et } sur la colonne de l'instruction parente (0 = pas de décalage)
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'inline-open 0)
+  (c-set-offset 'brace-list-open 0)
+  (c-set-offset 'block-open 0)
+  (c-set-offset 'arglist-close 0)
+  (c-set-offset 'arglist-intro '+))
 
-;; 🎨 Configuration Web (JS & CSS : 2 espaces)
+;; 🐘 Appliquer aux langages C-like (PHP, Java)
+(add-hook 'c-mode-common-hook #'my-modern-indent-style)
+(add-hook 'php-mode-hook #'my-modern-indent-style)
+(add-hook 'php-ts-mode-hook #'my-modern-indent-style)
+(add-hook 'java-mode-hook #'my-modern-indent-style)
+(add-hook 'java-ts-mode-hook #'my-modern-indent-style)
+
+;; 🎨 Configuration Web & JS (2 espaces mais accolades alignées)
 (setq js-indent-level 2)
 (setq typescript-indent-level 2)
 (setq css-indent-offset 2)
 
-;; 🌐 Compléter ta config web-mode (pour le JS et CSS insérés dans le HTML/Blade)
 (with-eval-after-load 'web-mode
+  (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
 
-;; --- 6. Tree-sitter (Emacs 29+) ---
+;; 🎯 Cas particulier de Dart (2 espaces)
+(use-package dart-mode
+  :ensure t
+  :hook (dart-mode . (lambda ()
+                       (setq c-basic-offset 2)
+                       (setq indent-tabs-mode nil))))
+
+;; --- 8. Tree-sitter (Emacs 29+) ---
 ;; Automatiser l'installation des grammaires manquantes
 
 ;; Corriger l'URL et la branche pour les grammaires PHP et PHPDoc
