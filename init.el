@@ -97,14 +97,22 @@
 ;; Templates (Twig & Blade)
 (use-package web-mode
   :mode ("\\.blade\\.php\\'" "\\.html\\.twig\\'" "\\.html\\'" "\\.css\\'")
+  :hook (web-mode . (lambda ()
+                      ;; On force les variables localement au buffer
+                      (setq-local web-mode-enable-auto-closing t)
+                      (setq-local web-mode-enable-auto-pairing t)
+                      (setq-local web-mode-enable-auto-indentation t)))
   :config
   (setq web-mode-engines-alist 
         '(("blade" . "\\.blade\\.php\\'")
           ("twig"  . "\\.html\\.twig\\'")))
   (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-enable-auto-quoting nil) ;; Évite conflits Blade
-  (setq web-mode-enable-auto-closing t)   ;; ✅ ACTIVE LA FERMETURE DES BALISES HTML
-  (setq web-mode-enable-auto-pairing t))  ;; ✅ ACTIVE LA FERMETURE DES {}, "", ()
+  (setq web-mode-enable-auto-quoting nil))
+
+;; emmet-mode
+(use-package emmet-mode
+  :ensure t
+  :hook (web-mode html-mode css-mode))
 
 ;; Composer
 (use-package composer
