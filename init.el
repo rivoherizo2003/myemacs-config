@@ -24,6 +24,17 @@
 (use-package all-the-icons :if (display-graphic-p))
 (use-package which-key :init (which-key-mode) :config (setq which-key-idle-delay 0.8))
 
+;; ✅ Active la fermeture automatique des parenthèses/accolades partout
+(electric-pair-mode 1)
+
+;; ajoute une ligne indentée entre deux accolades
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; Empêche l'auto-pairing des <> en mode PHP/Java pour ne pas gêner les flèches -> ou les types génériques
+(setq electric-pair-inhibit-predicate
+      `(lambda (c)
+         (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))
+
 ;; --- 3. Développement (Core & Git) ---
 (use-package magit)
 (use-package projectile
