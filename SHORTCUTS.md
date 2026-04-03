@@ -3,7 +3,10 @@
 * **`C-x C-f`** (`find-file`): Open or create a file (Native Emacs).
 * **`C-c p f`** (`projectile-find-file`): Search for a file by name across your entire project.
 * **`C-c p p`** (`projectile-switch-project`): **Switch Project** (Quickly jump between Laravel and Symfony projects).
-
+* **`C-x C-w`** (`Save As`): **Save As** Save the current file under a new name.
+* **`C-x C-s`** (`Save As`): **Save** Save.
+* **`C-x s`** (`Save As`): **Save All** Emacs asks you (y/n) for every open file that has unsaved changes..
+  
 ### 🔄 Navigation & Buffers
 
 * **`C-x b`** (`switch-to-buffer`): Switch to a file that is already open.
