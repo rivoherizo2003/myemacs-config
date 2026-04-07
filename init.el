@@ -30,10 +30,13 @@
 ;; ajoute une ligne indentée entre deux accolades
 (global-set-key (kbd "RET") 'newline-and-indent)
 
-;; Empêche l'auto-pairing des <> en mode PHP/Java pour ne pas gêner les flèches -> ou les types génériques
+;; 🧠 Inhibition intelligente
 (setq electric-pair-inhibit-predicate
       `(lambda (c)
-         (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c))))
+         (if (and (char-equal c ?<) 
+                  (not (derived-mode-p 'web-mode 'html-mode))) ;; 👈 NE PAS bloquer en Web/HTML
+             t 
+           (,electric-pair-inhibit-predicate c))))
 
 ;; --- 3. Développement (Core & Git) ---
 (use-package magit)
@@ -98,9 +101,9 @@
 (use-package web-mode
   :mode ("\\.blade\\.php\\'" "\\.html\\.twig\\'" "\\.html\\'" "\\.css\\'")
   :hook (web-mode . (lambda ()
-                      ;; On force les variables localement au buffer
                       (setq-local web-mode-enable-auto-closing t)
                       (setq-local web-mode-enable-auto-pairing t)
+                      (setq-local web-mode-tag-auto-close-style 2) ;; 👈 Ferme dès le ">"
                       (setq-local web-mode-enable-auto-indentation t)))
   :config
   (setq web-mode-engines-alist 
