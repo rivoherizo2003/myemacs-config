@@ -116,6 +116,9 @@
 (use-package emmet-mode
   :ensure t
   :hook (web-mode html-mode css-mode))
+(with-eval-after-load 'emmet-mode
+  (define-key emmet-mode-keymap (kbd "TAB") 'emmet-expand-line)
+  (define-key emmet-mode-keymap (kbd "<tab>") 'emmet-expand-line))
 
 ;; Composer
 (use-package composer
@@ -174,7 +177,9 @@
 ;; Corriger l'URL et la branche pour les grammaires PHP et PHPDoc
 (setq treesit-language-source-alist
   '((php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
-    (phpdoc "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")))
+    (html "https://github.com/tree-sitter/tree-sitter-html")
+    (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+    (css "https://github.com/tree-sitter/tree-sitter-css")))
 
 (use-package treesit-auto
   :ensure t
