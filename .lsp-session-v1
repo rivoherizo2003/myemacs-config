@@ -1,1 +1,1 @@
-#s(lsp-session ("/home/herizo/workspace/training-init-devweb") nil #s(hash-table test equal) #s(hash-table test equal) #s(hash-table test equal))
+#s(lsp-session ("/home/herizo/workspace/demo_inventor_php" "/home/herizo/workspace/voafafi-dockerized/sf4-voafafi" "/home/herizo/workspace/training-init-devweb") nil #s(hash-table test equal data (iph ("/home/herizo/workspace/demo_inventor_php" "/home/herizo/workspace/voafafi-dockerized/sf4-voafafi"))) #s(hash-table test equal) #s(hash-table test equal))

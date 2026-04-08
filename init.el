@@ -40,9 +40,15 @@
 
 ;; --- 3. Développement (Core & Git) ---
 (use-package magit)
+
 (use-package projectile
   :init (projectile-mode +1)
-  :bind-keymap ("C-c p" . projectile-command-map))
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (add-to-list 'projectile-globally-ignored-directories "vendor")
+  (add-to-list 'projectile-globally-ignored-directories "var")
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  (add-to-list 'projectile-globally-ignored-directories ".git"))
 
 (use-package company
   :config (global-company-mode)
@@ -116,6 +122,9 @@
 (use-package emmet-mode
   :ensure t
   :hook (web-mode html-mode css-mode))
+(with-eval-after-load 'emmet-mode
+  (define-key emmet-mode-keymap (kbd "TAB") 'emmet-expand-line)
+  (define-key emmet-mode-keymap (kbd "<tab>") 'emmet-expand-line))
 
 ;; Composer
 (use-package composer
@@ -135,8 +144,7 @@
 ;; 📐 Fonction de style "Moderne" (Accolades alignées verticalement)
 (defun my-modern-indent-style ()
   (setq c-basic-offset 4)
-  (c-set-style "java") ;; Style de base plus propre que "linux"
-  ;; Force l'alignement des { et } sur la colonne de l'instruction parente (0 = pas de décalage)
+  (c-set-style "java")
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'inline-open 0)
   (c-set-offset 'brace-list-open 0)
@@ -144,12 +152,19 @@
   (c-set-offset 'arglist-close 0)
   (c-set-offset 'arglist-intro '+))
 
-;; 🐘 Appliquer aux langages C-like (PHP, Java)
+;; 📐 Fonction d'indentation pour php-ts-mode (PAS un CC Mode)
+(defun my-php-ts-indent-style ()
+  (setq-local tab-width 4)
+  (setq-local indent-tabs-mode nil))
+
+;; 🐘 CC Modes uniquement
 (add-hook 'c-mode-common-hook #'my-modern-indent-style)
 (add-hook 'php-mode-hook #'my-modern-indent-style)
-(add-hook 'php-ts-mode-hook #'my-modern-indent-style)
 (add-hook 'java-mode-hook #'my-modern-indent-style)
 (add-hook 'java-ts-mode-hook #'my-modern-indent-style)
+
+;; 🐘 php-ts-mode : hook séparé sans c-set-style
+(add-hook 'php-ts-mode-hook #'my-php-ts-indent-style)
 
 ;; 🎨 Configuration Web & JS (2 espaces mais accolades alignées)
 (setq js-indent-level 2)
@@ -161,6 +176,15 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
 
+;; These folders must be ignored by the lsp
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]var\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]node_modules\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\.git\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]cache\\'")
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]log\\'"))
+
 ;; 🎯 Cas particulier de Dart (2 espaces)
 (use-package dart-mode
   :ensure t
@@ -169,25 +193,28 @@
                        (setq indent-tabs-mode nil))))
 
 ;; --- 8. Tree-sitter (Emacs 29+) ---
-;; Automatiser l'installation des grammaires manquantes
-
-;; Corriger l'URL et la branche pour les grammaires PHP et PHPDoc
 (setq treesit-language-source-alist
-  '((php "https://github.com/tree-sitter/tree-sitter-php" "master" "php/src")
-    (phpdoc "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")))
+  '((php        "https://github.com/tree-sitter/tree-sitter-php" "v0.23.0" "php/src")
+    (phpdoc     "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")
+    (html       "https://github.com/tree-sitter/tree-sitter-html")
+    (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+    (css        "https://github.com/tree-sitter/tree-sitter-css")))
+
+(setq treesit-font-lock-level 4)
 
 (use-package treesit-auto
   :ensure t
-  :custom
-  (treesit-auto-install 'prompt) ;; Met 't' à la place de 'prompt' si tu ne veux même pas qu'il te demande confirmation
+  :custom (treesit-auto-install 'prompt)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
+;; ✅ Remap sécurisé uniquement si la grammaire est disponible
 (setq major-mode-remap-alist
-      '((typescript-mode . typescript-ts-mode)
-        (js-mode . js-ts-mode)
-        (bash-mode . bash-ts-mode)
-        (php-mode . php-ts-mode)))
+      `((typescript-mode . typescript-ts-mode)
+        (js-mode         . js-ts-mode)
+        (bash-mode       . bash-ts-mode)
+        ,@(when (treesit-language-available-p 'php)
+            '((php-mode . php-ts-mode)))))
 
 (provide 'init.el)
