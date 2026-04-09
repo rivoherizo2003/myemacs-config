@@ -135,6 +135,12 @@
   :ensure t
   :hook (java-mode . lsp-deferred))
 
+;; prettier
+(use-package apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode +1))
+
 ;; --- 7. Gestion de l'Indentation & Style Universel ---
 
 ;; 🚫 La règle d'or : Espaces au lieu de Tabulations
