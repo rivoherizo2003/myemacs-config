@@ -185,6 +185,29 @@
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]cache\\'")
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]log\\'"))
 
+
+;; 🔥 Lire .gitignore et exclure automatiquement les dossiers de LSP  👈 AJOUTE ICI
+(defun my/lsp-ignore-from-gitignore ()
+  "Lit le .gitignore du projet et ajoute les entrées à lsp-file-watch-ignored-directories."
+  (when (and (fboundp 'projectile-project-root)
+             (projectile-project-root))
+    (let ((gitignore (concat (projectile-project-root) ".gitignore")))
+      (when (file-exists-p gitignore)
+        (with-temp-buffer
+          (insert-file-contents gitignore)
+          (dolist (line (split-string (buffer-string) "\n" t))
+            (unless (or (string-prefix-p "#" line)
+                        (string-blank-p line)
+                        (string-prefix-p "!" line))
+              (let* ((clean (string-trim line))
+                     (pattern (concat "[/\\\\]"
+                                      (regexp-quote
+                                       (string-trim-right clean "/"))
+                                      "\\'")))
+                (add-to-list 'lsp-file-watch-ignored-directories pattern)))))))))
+
+(add-hook 'lsp-before-initialize-hook #'my/lsp-ignore-from-gitignore)
+
 ;; 🎯 Cas particulier de Dart (2 espaces)
 (use-package dart-mode
   :ensure t

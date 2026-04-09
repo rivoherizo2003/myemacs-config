@@ -3,9 +3,12 @@
 * **`C-x C-f`** (`find-file`): Open or create a file (Native Emacs).
 * **`C-c p f`** (`projectile-find-file`): Search for a file by name across your entire project.
 * **`C-c p p`** (`projectile-switch-project`): **Switch Project** (Quickly jump between Laravel and Symfony projects).
+* **`C-c p b`** (`projectile-switch-to-buffer`): **Switch file** Emacs will list only openned files in the current project.
 * **`C-x C-w`** (`Save As`): **Save As** Save the current file under a new name.
-* **`C-x C-s`** (`Save As`): **Save** Save.
+* **`C-x C-s`** (`Save`): **Save** Save.
 * **`C-x s`** (`Save As`): **Save All** Emacs asks you (y/n) for every open file that has unsaved changes..
+* **`C-x 0`** (`Close window`) Close the current window
+* **`C-x o`** (`Move to`) Move to another window
   
 ### 🔄 Navigation & Buffers
 
@@ -19,6 +22,10 @@
 * **`C-x h`**: Select the entire buffer/file.
 * **`C-k`**: Delete from the cursor position to the end of the line.
 * **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.
+* **`C-a C-o`**: Insert line above (stay on current)
+* **`C-p C-e`**: Insert line above (move to it)
+* **`C-/`** (`Undo`): **Undo** Cancel update. To do a **Redo** tape `C-/`
+* **`C-g`** Cancel Selection
 
 ### 📋 Copy & Paste (Kill Ring)
 
@@ -51,3 +58,7 @@
 * **`s`** (within Magit): Stage the file or change under the cursor.
 * **`c c`**: Create a commit.
 * **`P p`**: Push changes to the remote server.
+
+### projectile
+
+`M-x projectile-add-known-project`Add a folder to list of projects

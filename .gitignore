@@ -32,3 +32,5 @@ projectile.cache
 libtree-sitter-*
 projectile-bookmarks.*
 .lsp-session-v1
+.cache
+projects
