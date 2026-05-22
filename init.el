@@ -247,3 +247,5 @@
             '((php-mode . php-ts-mode)))))
 
 (provide 'init.el)
+
+(setq frame-resize-pixelwise t)
