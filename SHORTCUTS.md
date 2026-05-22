@@ -1,3 +1,7 @@
+# EMACS
+# VIM
+# EndeavourOS
+
 ### 🔍 Searching & 📂 Opening Files
 
 * **`C-x C-f`** (`find-file`): Open or create a file (Native Emacs).
@@ -9,19 +13,23 @@
 * **`C-x s`** (`Save As`): **Save All** Emacs asks you (y/n) for every open file that has unsaved changes..
 * **`C-x 0`** (`Close window`) Close the current window
 * **`C-x o`** (`Move to`) Move to another window
+* **`C-x d`** (`Rename to`) Rename file. Specify folder path and tape enter. * **`Shift + r`** Tape the new filename.
+* **`C-x C-+`** (`Zoom in`) Zoom in.
+* **`C-x C--`** (`Zoom out`) Zoom out.
   
 ### 🔄 Navigation & Buffers
 
 * **`C-x b`** (`switch-to-buffer`): Switch to a file that is already open.
 * **`C-c p b`** (`projectile-switch-to-buffer`): Switch to an open file belonging to the current project.
 * **`C-x o`** (`other-window`): Jump the cursor to another window (if your screen is split).
+* **`C-x 1`**: **Close other**. Close other window except the current.
 
 ### 🎯 Selecting & ❌ Deleting Lines
 
 * **`C-SPC` + `C-n` / `C-p`**: **Select text**. Set the mark with `C-SPC`, then move the cursor to highlight.
 * **`C-x h`**: Select the entire buffer/file.
 * **`C-k`**: Delete from the cursor position to the end of the line.
-* **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.
+* **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.(ctrl+shift+backspace)
 * **`C-a C-o`**: Insert line above (stay on current)
 * **`C-p C-e`**: Insert line above (move to it)
 * **`C-/`** (`Undo`): **Undo** Cancel update. To do a **Redo** tape `C-/`
@@ -59,6 +67,11 @@
 * **`c c`**: Create a commit.
 * **`P p`**: Push changes to the remote server.
 
-### projectile
+### 🛠️ projectile
 
 `M-x projectile-add-known-project`Add a folder to list of projects
+
+### 🛠️ window split
+
+* **`C-x 2`**: **Split horizontally**.
+* **`C-x 3`**: **Split vertically**.
