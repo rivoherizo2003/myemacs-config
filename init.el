@@ -148,7 +148,8 @@
 ;; Java
 (use-package lsp-java
   :ensure t
-  :hook (java-mode . lsp-deferred))
+  :hook ((java-mode . lsp-deferred)
+         (java-ts-mode . lsp-deferred))) ;;
 
 ;; prettier
 (use-package apheleia
@@ -178,11 +179,18 @@
   (setq-local tab-width 4)
   (setq-local indent-tabs-mode nil))
 
+;; 📐 Fonction d'indentation pour java-ts-mode (PAS un CC Mode)
+(defun my-java-ts-indent-style ()
+  (setq-local java-ts-mode-indent-offset 4)
+  (setq-local tab-width 4)
+  (setq-local indent-tabs-mode nil))
+
+(add-hook 'java-ts-mode-hook #'my-java-ts-indent-style)
+
 ;; 🐘 CC Modes uniquement
 (add-hook 'c-mode-common-hook #'my-modern-indent-style)
 (add-hook 'php-mode-hook #'my-modern-indent-style)
 (add-hook 'java-mode-hook #'my-modern-indent-style)
-(add-hook 'java-ts-mode-hook #'my-modern-indent-style)
 
 ;; 🐘 php-ts-mode : hook séparé sans c-set-style
 (add-hook 'php-ts-mode-hook #'my-php-ts-indent-style)
@@ -240,6 +248,17 @@
                   ("C-c d r" . lsp-dart-flutter-hot-restart) ;; 🔄 Hot Restart manuel
                   ("C-c d q" . dap-disconnect)))   ;; 🛑 Quitter le mode debug
 
+;; ---------------------------------------------------------
+;; 1. Configuration de DAP MODE
+;; ---------------------------------------------------------
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
+  :config
+  (dap-mode 1)
+  (dap-ui-mode 1)         ;; Active l'interface visuelle de debug
+  (dap-tooltip-mode 1))
+
 (use-package lsp-dart
   :ensure t
   :hook (dart-mode . lsp)
@@ -251,16 +270,7 @@
   
   ;; Optionnel : si tu veux aussi le Hot Restart automatique (plus lourd)
   ;; (setq lsp-dart-dap-flutter-hot-restart-on-save t)
-  (require 'dap-dart)
   )
-
-(use-package dap-mode
-  :ensure t
-  :after lsp-mode
-  :config
-  (dap-mode 1)
-  (dap-ui-mode 1)         ;; Active l'interface visuelle de debug
-  (dap-tooltip-mode 1))
 
 ;; --- 8. Tree-sitter (Emacs 29+) ---
 (setq treesit-language-source-alist
@@ -268,7 +278,8 @@
     (phpdoc     "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")
     (html       "https://github.com/tree-sitter/tree-sitter-html")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-    (css        "https://github.com/tree-sitter/tree-sitter-css")))
+    (css        "https://github.com/tree-sitter/tree-sitter-css")
+    (java       "https://github.com/tree-sitter/tree-sitter-java"))) ;;
 
 (setq treesit-font-lock-level 4)
 

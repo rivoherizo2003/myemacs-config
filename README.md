@@ -135,5 +135,10 @@ Once the code is added to your configuration file, execute these steps in Emacs:
 emacsclient -e "(kill-emacs)"
 ```
 
+### Create folder for temporary files
 
-*Configured with ❤️ on **EndeavourOS**. Happy Coding! 🎉*
+```bash
+mkdir -p ~/.emacs.d/backups && mkdir -p ~/.emacs.d/auto-save
+```
+
+Configured with ❤️ on **EndeavourOS**. Happy Coding! 🎉*

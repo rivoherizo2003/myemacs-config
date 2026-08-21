@@ -1,5 +1,5 @@
 # EMACS
-# VIM
+
 # EndeavourOS
 
 ### 🔍 Searching & 📂 Opening Files
