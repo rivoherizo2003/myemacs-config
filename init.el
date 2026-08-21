@@ -149,7 +149,9 @@
 (use-package lsp-java
   :ensure t
   :hook ((java-mode . lsp-deferred)
-         (java-ts-mode . lsp-deferred))) ;;
+         (java-ts-mode . lsp-deferred)) ;;
+  :custom
+  (lsp-java-java-path "/usr/lib/jvm/java-21-openjdk/bin/java")) ;;
 
 ;; prettier
 (use-package apheleia

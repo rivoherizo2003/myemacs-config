@@ -35,3 +35,6 @@ projectile-bookmarks.*
 .cache
 projects
 .extension/
+
+workspace/*
+eclipse.jdt.ls/*
