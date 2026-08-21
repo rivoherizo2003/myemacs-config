@@ -1,4 +1,5 @@
 ;;; init.el --- Emacs Pro Config: Symfony 7, Laravel 13 & Tailwind CSS
+(setq gc-cons-threshold (* 100 1024 1024)) ;; 100 Mo au démarrage
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file) (load custom-file))
@@ -36,10 +37,18 @@
          (if (and (char-equal c ?<) 
                   (not (derived-mode-p 'web-mode 'html-mode))) ;; 👈 NE PAS bloquer en Web/HTML
              t 
-           (,electric-pair-inhibit-predicate c))))
+           (default-value electric-pair-inhibit-predicate c))))
 
 ;; --- 3. Développement (Core & Git) ---
-(use-package magit)
+(use-package magit
+  :bind ("C-x g" . magit-status)) ;; Ouvre l'interface Git instantanément
+
+;; --- vterm ---
+(use-package vterm
+  :ensure t
+  :bind ("C-c t" . vterm) ;; Ouvre le terminal complet avec Ctrl-c t
+  :config
+  (setq vterm-kill-buffer-on-exit t))
 
 (use-package projectile
   :init (projectile-mode +1)
@@ -54,6 +63,12 @@
   :config (global-company-mode)
   (setq company-idle-delay 0.1 company-minimum-prefix-length 1))
 
+;; 📦 Package indispensable pour les snippets LSP (Flutter Widgets, etc.)
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
+  
 ;; --- 4. LSP Mode (Le cerveau) ---
 (use-package lsp-mode
   :init (setq lsp-keymap-prefix "C-c l")
@@ -133,7 +148,8 @@
 ;; Java
 (use-package lsp-java
   :ensure t
-  :hook (java-mode . lsp-deferred))
+  :hook ((java-mode . lsp-deferred)
+         (java-ts-mode . lsp-deferred))) ;;
 
 ;; prettier
 (use-package apheleia
@@ -163,11 +179,18 @@
   (setq-local tab-width 4)
   (setq-local indent-tabs-mode nil))
 
+;; 📐 Fonction d'indentation pour java-ts-mode (PAS un CC Mode)
+(defun my-java-ts-indent-style ()
+  (setq-local java-ts-mode-indent-offset 4)
+  (setq-local tab-width 4)
+  (setq-local indent-tabs-mode nil))
+
+(add-hook 'java-ts-mode-hook #'my-java-ts-indent-style)
+
 ;; 🐘 CC Modes uniquement
 (add-hook 'c-mode-common-hook #'my-modern-indent-style)
 (add-hook 'php-mode-hook #'my-modern-indent-style)
 (add-hook 'java-mode-hook #'my-modern-indent-style)
-(add-hook 'java-ts-mode-hook #'my-modern-indent-style)
 
 ;; 🐘 php-ts-mode : hook séparé sans c-set-style
 (add-hook 'php-ts-mode-hook #'my-php-ts-indent-style)
@@ -219,7 +242,35 @@
   :ensure t
   :hook (dart-mode . (lambda ()
                        (setq c-basic-offset 2)
-                       (setq indent-tabs-mode nil))))
+                       (setq indent-tabs-mode nil)))
+  :bind (:map dart-mode-map
+                  ("C-c d d" . dap-debug)          ;; 🚀 Lancer l'application Flutter
+                  ("C-c d r" . lsp-dart-flutter-hot-restart) ;; 🔄 Hot Restart manuel
+                  ("C-c d q" . dap-disconnect)))   ;; 🛑 Quitter le mode debug
+
+;; ---------------------------------------------------------
+;; 1. Configuration de DAP MODE
+;; ---------------------------------------------------------
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
+  :config
+  (dap-mode 1)
+  (dap-ui-mode 1)         ;; Active l'interface visuelle de debug
+  (dap-tooltip-mode 1))
+
+(use-package lsp-dart
+  :ensure t
+  :hook (dart-mode . lsp)
+  :config
+  ;; C'est ici que la magie opère pour le Hot Reload au point de sauvegarde
+  (setq lsp-dart-dap-flutter-hot-reload-on-save t)
+  ;; ⚠️ CHANGE CE CHEMIN par le vrai chemin racine de ton Flutter trouvé à l'étape 1
+  (setq lsp-dart-flutter-sdk-dir "/home/herizo/flutter")
+  
+  ;; Optionnel : si tu veux aussi le Hot Restart automatique (plus lourd)
+  ;; (setq lsp-dart-dap-flutter-hot-restart-on-save t)
+  )
 
 ;; --- 8. Tree-sitter (Emacs 29+) ---
 (setq treesit-language-source-alist
@@ -227,9 +278,24 @@
     (phpdoc     "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")
     (html       "https://github.com/tree-sitter/tree-sitter-html")
     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-    (css        "https://github.com/tree-sitter/tree-sitter-css")))
+    (css        "https://github.com/tree-sitter/tree-sitter-css")
+    (java       "https://github.com/tree-sitter/tree-sitter-java"))) ;;
 
 (setq treesit-font-lock-level 4)
+
+;; 9. Désactiver les Lockfiles (inutiles si tu es le seul développeur sur ta machine)
+(setq create-lockfiles nil)
+
+;; 2. Centraliser les fichiers de sauvegarde (*~) dans ~/.emacs.d/backups
+(setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-emacs-directory))))
+(setq vc-make-backup-files t)    ; Faire des backups même pour les fichiers sous Git
+(setq version-control t)         ; Garder plusieurs versions des backups
+(setq kept-new-versions 5)       ; Garder les 5 plus récentes
+(setq kept-old-versions 2)       ; Garder les 2 plus anciennes
+(setq delete-old-versions t)     ; Supprimer silencieusement le reste
+
+;; 10. Centraliser les fichiers d'auto-sauvegarde (#*#) dans ~/.emacs.d/auto-save/
+(setq auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save/" user-emacs-directory) t)))
 
 (use-package treesit-auto
   :ensure t
@@ -247,3 +313,10 @@
             '((php-mode . php-ts-mode)))))
 
 (provide 'init.el)
+
+(setq frame-resize-pixelwise t)
+
+;; À placer tout à la fin de l'init.el
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 20 1024 1024)))) ;; 2 Mo en routine

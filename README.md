@@ -123,12 +123,22 @@ Once the code is added to your configuration file, execute these steps in Emacs:
 
 > **✅ Result:** Emacs will clone the repository and compile the grammar in the background. Go back to your PHP file, run `M-x revert-buffer` to refresh it: the warnings will have disappeared, and your documentation blocks will benefit from advanced syntax highlighting!
 
-
-###  Debug PHP mode
+### Debug PHP mode
 
 1. `M-: font-lock-mode` In the php file to check if font-lock is active. It's ok if it returns "t" and "nil" if not
 2. `M-x font-lock-mode` Launch this when `M-: font-lock-mode` returns "nil"
 3. `M-x view-echo-area-messages` To check buffer message at start
 
+### Reboot emacs
 
-*Configured with ❤️ on **EndeavourOS**. Happy Coding! 🎉*
+```bash
+emacsclient -e "(kill-emacs)"
+```
+
+### Create folder for temporary files
+
+```bash
+mkdir -p ~/.emacs.d/backups && mkdir -p ~/.emacs.d/auto-save
+```
+
+Configured with ❤️ on **EndeavourOS**. Happy Coding! 🎉*

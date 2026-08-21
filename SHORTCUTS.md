@@ -1,3 +1,7 @@
+# EMACS
+
+# EndeavourOS
+
 ### 🔍 Searching & 📂 Opening Files
 
 * **`C-x C-f`** (`find-file`): Open or create a file (Native Emacs).
@@ -9,23 +13,31 @@
 * **`C-x s`** (`Save As`): **Save All** Emacs asks you (y/n) for every open file that has unsaved changes..
 * **`C-x 0`** (`Close window`) Close the current window
 * **`C-x o`** (`Move to`) Move to another window
+* **`C-x d`** (`Rename to`) Rename file. Specify folder path and tape enter. * **`Shift + r`** Tape the new filename.
+* **`C-x C-+`** (`Zoom in`) Zoom in.
+* **`C-x C--`** (`Zoom out`) Zoom out.
+* **`C-c p D`** (`projectile-dired`) : Ouvre le gestionnaire de fichiers natif d'Emacs (Dired)
+* **`C-c p d`** (`projectile-find-dir`) : C'est la commande idéale. Elle va lister tous les dossiers de ton projet racine et te permettre d'y naviguer rapidement (en ignorant automatiquement vendor, node_modules, etc., grâce à ta configuration).
   
 ### 🔄 Navigation & Buffers
 
 * **`C-x b`** (`switch-to-buffer`): Switch to a file that is already open.
 * **`C-c p b`** (`projectile-switch-to-buffer`): Switch to an open file belonging to the current project.
 * **`C-x o`** (`other-window`): Jump the cursor to another window (if your screen is split).
+* **`C-x 1`**: **Close other**. Close other window except the current.
 
 ### 🎯 Selecting & ❌ Deleting Lines
 
 * **`C-SPC` + `C-n` / `C-p`**: **Select text**. Set the mark with `C-SPC`, then move the cursor to highlight.
 * **`C-x h`**: Select the entire buffer/file.
 * **`C-k`**: Delete from the cursor position to the end of the line.
-* **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.
+* **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.(ctrl+shift+backspace)
 * **`C-a C-o`**: Insert line above (stay on current)
 * **`C-p C-e`**: Insert line above (move to it)
 * **`C-/`** (`Undo`): **Undo** Cancel update. To do a **Redo** tape `C-/`
 * **`C-g`** Cancel Selection
+* **`C-e`** Move cursor at the end of line
+* **`C-x C-;`** Toggle a comment on the current line (or lines) and immediately move to the next line
 
 ### 📋 Copy & Paste (Kill Ring)
 
@@ -39,6 +51,11 @@
 * **`C-c l g`**: **Go to Definition**. Jump directly to the source of the class or method under the cursor.
 * **`M-g M-g`**: Jump to an absolute line number.
 * **`C-u [num] C-n/p`**: Relative jump (e.g., `C-u 10 C-n` to move 10 lines down).
+* **`C-s`**: **Search forward**. Search for a word in the current file.
+* **`C-s` again**: Jump to the next match.
+* **`C-r`**: **Search backward**. Search for previous matches.
+* **`RET`**: Finish search.
+* **`C-g`**: Cancel search.
 
 ### 🐘 PHP & Frameworks (Custom Shortcuts)
 
@@ -51,6 +68,7 @@
 * **`M-RET`**: **Quick Fix / Code Action**. Auto-import missing namespaces or fix errors.
 * **`C-c l r`**: **Rename**. Safely rename a variable or method across the entire project.
 * **`M-x lsp-format-buffer`**: Reformat the entire file based on standards (PSR-12, etc.).
+* **`C-c l = =`**: Reformat the entire file based on standards (PSR-12, etc.).
 
 ### 🌿 Git (Magit)
 
@@ -59,6 +77,27 @@
 * **`c c`**: Create a commit.
 * **`P p`**: Push changes to the remote server.
 
-### projectile
+### 🛠️ projectile
 
 `M-x projectile-add-known-project`Add a folder to list of projects
+`C-c t` Open terminal
+
+#### Delete file
+
+* **`C-x d`** : Open Dired
+* **`n et p`** : Navigate
+* **`d`** : Mark file to delete
+* **`x`** : Confirm delete
+
+### 🛠️ window split
+
+* **`C-x 2`**: **Split horizontally**.
+* **`C-x 3`**: **Split vertically**.
+
+## 🎹 Tableau Récapitulatif des Raccourcis
+
+| Combinaison | Commande Emacs | Action | Usage recommandé |
+| :--- | :--- | :--- | :--- |
+| **`C-c d d`** | `dap-debug` | **🚀 Lancer l'application** | Au démarrage du dev, pour compiler et lancer l'app sur l'émulateur/appareil sélectionné. |
+| **`C-c d r`** | `lsp-dart-flutter-hot-restart` | **🔄 Hot Restart manuel** | Lorsque les modifications touchent à l'état global, au `main()`, ou aux constructeurs lourds. |
+| **`C-c d q`** | `dap-disconnect` | **🛑 Quitter le mode debug** | En fin de session pour arrêter proprement l'application et libérer les ressources système. |
