@@ -9,7 +9,7 @@
 * **`C-c p p`** (`projectile-switch-project`): **Switch Project** (Quickly jump between Laravel and Symfony projects).
 * **`C-c p b`** (`projectile-switch-to-buffer`): **Switch file** Emacs will list only openned files in the current project.
 * **`C-x C-w`** (`Save As`): **Save As** Save the current file under a new name.
-* **`C-x C-s`** (`Save`): **Save** Save.
+* **`C-x C-./l;l  s`** (`Save`): **Save** Save.
 * **`C-x s`** (`Save As`): **Save All** Emacs asks you (y/n) for every open file that has unsaved changes..
 * **`C-x 0`** (`Close window`) Close the current window
 * **`C-x o`** (`Move to`) Move to another window
@@ -17,15 +17,11 @@
 * **`C-x C-+`** (`Zoom in`) Zoom in.
 * **`C-x C--`** (`Zoom out`) Zoom out.
 * **`C-c p D`** (`projectile-dired`) : Ouvre le gestionnaire de fichiers natif d'Emacs (Dired)
-* **`C-c p d`** (`projectile-find-dir`) : C'est la commande idéale. Elle va lister tous les dossiers de ton projet racine et te permettre d'y naviguer rapidement (en ignorant automatiquement vendor, node_modules, etc., grâce à ta configuration).
-  
-### 🔄 Navigation & Buffers
-
-* **`C-x b`** (`switch-to-buffer`): Switch to a file that is already open.
+* **`C-c p d`** (`projectile-find-dir`) : C'est la commande idéale. Elle va lister tous les dossiers de ton projet racine et te permettre d'y naviguer rapidement (en ignorant automatiquement vendor, node_modules, etc., grâce à ta cpoi -buffer`): Switch to a file that is already open.
 * **`C-c p b`** (`projectile-switch-to-buffer`): Switch to an open file belonging to the current project.
 * **`C-x o`** (`other-window`): Jump the cursor to another window (if your screen is split).
 * **`C-x 1`**: **Close other**. Close other window except the current.
-
+LIMIT 10 OFFSET 20 (Récupère les produits 21 à 30)
 ### 🎯 Selecting & ❌ Deleting Lines
 
 * **`C-SPC` + `C-n` / `C-p`**: **Select text**. Set the mark with `C-SPC`, then move the cursor to highlight.
@@ -34,8 +30,7 @@
 * **`C-S-Backspace`**: **Kill whole line**, regardless of cursor position.(ctrl+shift+backspace)
 * **`C-a C-o`**: Insert line above (stay on current)
 * **`C-p C-e`**: Insert line above (move to it)
-* **`C-/`** (`Undo`): **Undo** Cancel update. To do a **Redo** tape `C-/`
-* **`C-g`** Cancel Selection
+* **`C-/`** (`Undo`): **Undo** Cancel update. To do a **Redo** tape `C-/`* **`C-g`** Cancel Selection
 * **`C-e`** Move cursor at the end of line
 * **`C-x C-;`** Toggle a comment on the current line (or lines) and immediately move to the next line
 
@@ -88,6 +83,7 @@
 * **`n et p`** : Navigate
 * **`d`** : Mark file to delete
 * **`x`** : Confirm delete
+* **`C`** : Duplicate file
 
 ### 🛠️ window split
 
@@ -101,3 +97,7 @@
 | **`C-c d d`** | `dap-debug` | **🚀 Lancer l'application** | Au démarrage du dev, pour compiler et lancer l'app sur l'émulateur/appareil sélectionné. |
 | **`C-c d r`** | `lsp-dart-flutter-hot-restart` | **🔄 Hot Restart manuel** | Lorsque les modifications touchent à l'état global, au `main()`, ou aux constructeurs lourds. |
 | **`C-c d q`** | `dap-disconnect` | **🛑 Quitter le mode debug** | En fin de session pour arrêter proprement l'application et libérer les ressources système. |
+
+## Lsp
+
+**`M-x lsp-workspace-restart`** (Alt + X, puis la commande) et appuyez sur Entrée. Redémarrer le serveur LSP.

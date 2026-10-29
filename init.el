@@ -31,13 +31,13 @@
 ;; ajoute une ligne indentée entre deux accolades
 (global-set-key (kbd "RET") 'newline-and-indent)
 
-;; 🧠 Inhibition intelligente
+;; 🧠 Inhibition intelligente (Corrigée)
 (setq electric-pair-inhibit-predicate
-      `(lambda (c)
-         (if (and (char-equal c ?<) 
-                  (not (derived-mode-p 'web-mode 'html-mode))) ;; 👈 NE PAS bloquer en Web/HTML
-             t 
-           (default-value electric-pair-inhibit-predicate c))))
+      (lambda (c)
+        (if (and (char-equal c ?<) 
+                 (not (derived-mode-p 'web-mode 'html-mode))) ;; 👈 NE PAS bloquer en Web/HTML
+            t 
+          (electric-pair-default-inhibit c))))
 
 ;; --- 3. Développement (Core & Git) ---
 (use-package magit
@@ -68,7 +68,7 @@
   :ensure t
   :config
   (yas-global-mode 1))
-  
+
 ;; --- 4. LSP Mode (Le cerveau) ---
 (use-package lsp-mode
   :init (setq lsp-keymap-prefix "C-c l")
@@ -82,6 +82,8 @@
   (setq lsp-php-server-any-version t)
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-idle-delay 0.5)
+
+  (setq lsp-file-watch-threshold 5000)
 
   (setq lsp-enable-indentation nil)
   (setq lsp-enable-on-type-formatting nil)
@@ -246,9 +248,9 @@
                        (setq c-basic-offset 2)
                        (setq indent-tabs-mode nil)))
   :bind (:map dart-mode-map
-                  ("C-c d d" . dap-debug)          ;; 🚀 Lancer l'application Flutter
-                  ("C-c d r" . lsp-dart-flutter-hot-restart) ;; 🔄 Hot Restart manuel
-                  ("C-c d q" . dap-disconnect)))   ;; 🛑 Quitter le mode debug
+              ("C-c d d" . dap-debug)          ;; 🚀 Lancer l'application Flutter
+              ("C-c d r" . lsp-dart-flutter-hot-restart) ;; 🔄 Hot Restart manuel
+              ("C-c d q" . dap-disconnect)))   ;; 🛑 Quitter le mode debug
 
 ;; ---------------------------------------------------------
 ;; 1. Configuration de DAP MODE
@@ -276,12 +278,12 @@
 
 ;; --- 8. Tree-sitter (Emacs 29+) ---
 (setq treesit-language-source-alist
-  '((php        "https://github.com/tree-sitter/tree-sitter-php" "v0.23.0" "php/src")
-    (phpdoc     "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")
-    (html       "https://github.com/tree-sitter/tree-sitter-html")
-    (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-    (css        "https://github.com/tree-sitter/tree-sitter-css")
-    (java       "https://github.com/tree-sitter/tree-sitter-java"))) ;;
+      '((php        "https://github.com/tree-sitter/tree-sitter-php" "v0.23.0" "php/src")
+        (phpdoc     "https://github.com/claytonrcarter/tree-sitter-phpdoc" "master" "src")
+        (html       "https://github.com/tree-sitter/tree-sitter-html")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+        (css        "https://github.com/tree-sitter/tree-sitter-css")
+        (java       "https://github.com/tree-sitter/tree-sitter-java"))) ;;
 
 (setq treesit-font-lock-level 4)
 
