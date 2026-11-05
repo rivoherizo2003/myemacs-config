@@ -138,7 +138,7 @@
 ;; emmet-mode
 (use-package emmet-mode
   :ensure t
-  :hook (web-mode html-mode css-mode))
+  :hook (web-mode html-mode css-mode php-mode php-ts-mode))
 (with-eval-after-load 'emmet-mode
   (define-key emmet-mode-keymap (kbd "TAB") 'emmet-expand-line)
   (define-key emmet-mode-keymap (kbd "<tab>") 'emmet-expand-line))
