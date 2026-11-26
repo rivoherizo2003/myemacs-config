@@ -17,11 +17,15 @@
 * **`C-x C-+`** (`Zoom in`) Zoom in.
 * **`C-x C--`** (`Zoom out`) Zoom out.
 * **`C-c p D`** (`projectile-dired`) : Ouvre le gestionnaire de fichiers natif d'Emacs (Dired)
-* **`C-c p d`** (`projectile-find-dir`) : C'est la commande idéale. Elle va lister tous les dossiers de ton projet racine et te permettre d'y naviguer rapidement (en ignorant automatiquement vendor, node_modules, etc., grâce à ta cpoi -buffer`): Switch to a file that is already open.
+* **`C-c p d`** (`projectile-find-dir`) : C'est la commande idéale. Elle va lister tous les dossiers de ton projet racine et te permettre d'y naviguer rapidement (en ignorant automatiquement vendor, node_modules, etc., grâce à ta cpoi -buffer): Switch to a file that is already open.
 * **`C-c p b`** (`projectile-switch-to-buffer`): Switch to an open file belonging to the current project.
 * **`C-x o`** (`other-window`): Jump the cursor to another window (if your screen is split).
 * **`C-x 1`**: **Close other**. Close other window except the current.
-LIMIT 10 OFFSET 20 (Récupère les produits 21 à 30)
+* **`C-x d` + `SHIFT-+` ** (`Create folder`) 
+* **`C-x d` + `Put cursor on the file` + `SHIFT+r`**: Confirm to move the file
+* **`M-<` + `Put cursor on first line` + `M-%`** : Rename variable old > new
+* **`C-c p s g`** : recherche un texte dans tout le projet (fonctionne directement sans installation supplémentaire).
+
 ### 🎯 Selecting & ❌ Deleting Lines
 
 * **`C-SPC` + `C-n` / `C-p`**: **Select text**. Set the mark with `C-SPC`, then move the cursor to highlight.

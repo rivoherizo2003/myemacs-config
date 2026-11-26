@@ -1,4 +1,5 @@
-;;; init.el --- Emacs Pro Config: Symfony 7, Laravel 13 & Tailwind CSS
+;;; init.el --- Emacs Pro Config: Symfony 7, Laravel 13 & Tailwind CSS  -*- lexical-binding: t;-*-
+(setq native-comp-async-report-warnings-errors nil)
 (setq gc-cons-threshold (* 100 1024 1024)) ;; 100 Mo au démarrage
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -63,6 +64,24 @@
   :config (global-company-mode)
   (setq company-idle-delay 0.1 company-minimum-prefix-length 1))
 
+;; 🗂️ Espaces de travail isolés par projet + sauvegarde sur disque
+(use-package perspective
+  :ensure t
+  :custom
+  (persp-mode-prefix-key (kbd "C-c M-p"))
+  (persp-state-default-file (expand-file-name "persp-state" user-emacs-directory))
+  :init
+  (persp-mode)
+  :config
+  ;; Sauvegarde automatique de l'état de tous les projets en quittant Emacs
+  (add-hook 'kill-emacs-hook #'persp-state-save))
+
+(use-package persp-projectile
+  :ensure t
+  :after (perspective projectile)
+  :bind (:map projectile-command-map
+              ("p" . projectile-persp-switch-project)))
+
 ;; 📦 Package indispensable pour les snippets LSP (Flutter Widgets, etc.)
 (use-package yasnippet
   :ensure t
@@ -90,7 +109,22 @@
   
   ;; 🎨 FORCER LSP À LIRE BLADE ET TWIG COMME DU HTML
   (add-to-list 'lsp-language-id-configuration '("\\.blade\\.php\\'" . "html"))
-  (add-to-list 'lsp-language-id-configuration '("\\.html\\.twig\\'" . "html"))
+  ;;(add-to-list 'lsp-language-id-configuration '("\\.html\\.twig\\'" . "html"))
+  ;; 🍃 Configuration de Twiggy (Serveur LSP Twig)
+  (add-to-list 'lsp-language-id-configuration '("\\.html\\.twig\\'" . "twig"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("twiggy-language-server" "--stdio"))
+                    :major-modes '(web-mode)
+                    :activation-fn (lambda (file-name _mode)
+                                     (and file-name (string-match-p "\\.twig\\'" file-name)))
+                    :multi-root t
+                    :server-id 'twiggy))
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("symfony-lsp"))
+                    :major-modes '(php-mode php-ts-mode web-mode yaml-mode)
+                    :add-on? t  ;; 👈 Permet de tourner en parallèle d'Intelephense et Twiggy sans les bloquer
+                    :server-id 'symfony-lsp))
 
   ;; 🛑 DIRE A LSP D'IGNORER LES GROS DOSSIERS SYMFONY/LARAVEL
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
@@ -148,6 +182,7 @@
   :bind (:map php-mode-map ("C-c c c" . composer-install)))
 
 ;; Java
+(require 'xml)
 (use-package lsp-java
   :ensure t
   :hook ((java-mode . lsp-deferred)
@@ -159,6 +194,13 @@
 (use-package apheleia
   :ensure t
   :config
+  (add-to-list 'apheleia-formatters
+               '(prettier-twig . ("apheleia-npx" "prettier" "--stdin-filepath" filepath)))
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (and buffer-file-name
+                         (string-match-p "\\.twig\\'" buffer-file-name))
+                (setq-local apheleia-formatter 'prettier-twig))))
   (apheleia-global-mode +1))
 
 ;; --- 7. Gestion de l'Indentation & Style Universel ---

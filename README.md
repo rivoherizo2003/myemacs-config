@@ -24,6 +24,7 @@ To enable code intelligence (LSP), you **must** install the following language s
 npm install -g intelephense              # PHP Language Server
 npm install -g @tailwindcss/language-server # Tailwind CSS Support
 npm install -g typescript typescript-language-server # JS / TS Support
+npm install -g twiggy-language-server
 ```
 
 ### 2. Java (via Pacman)
