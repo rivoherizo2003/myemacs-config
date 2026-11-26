@@ -35,3 +35,12 @@ projectile-bookmarks.*
 .cache
 projects
 .extension/
+
+workspace/*
+eclipse.jdt.ls/*
+
+# --- Sessions & Espaces de travail (Desktop / Perspective) ---
+.emacs.desktop
+.emacs.desktop.lock
+persp-state
+persp-confs/
