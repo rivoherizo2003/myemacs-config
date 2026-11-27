@@ -44,3 +44,7 @@ eclipse.jdt.ls/*
 .emacs.desktop.lock
 persp-state
 persp-confs/
+
+# --- Cache de connexions distantes / Docker / Sudo (TRAMP) ---
+tramp
+tramp-auto-save/

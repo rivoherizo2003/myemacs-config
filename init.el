@@ -9,9 +9,24 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
-(unless (package-installed-p 'use-package) (package-refresh-contents) (package-install 'use-package))
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;; 🔄 Auto-refresh MELPA uniquement si un nouveau paquet renvoie "Not found"
+(defun my/package-install-refresh-on-error (orig-fun pkg &rest args)
+  "Rafraîchit l'index MELPA une seule fois si le téléchargement d'un paquet échoue."
+  (condition-case nil
+      (apply orig-fun pkg args)
+    (error
+     (message "Index MELPA périmé pour %s, mise à jour automatique..." pkg)
+     (package-refresh-contents)
+     (apply orig-fun pkg args))))
+
+(advice-add 'package-install :around #'my/package-install-refresh-on-error)
 
 ;; --- 2. Interface et Performance ---
 (setq inhibit-startup-message t)
@@ -22,8 +37,12 @@
 (setq-default line-spacing 0.1)
 
 (use-package doom-themes :config (load-theme 'doom-one t))
-(use-package doom-modeline :init (doom-modeline-mode 1))
-(use-package all-the-icons :if (display-graphic-p))
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-persp-name t)
+  (doom-modeline-display-default-persp-name nil))
+(use-package all-the-icons :ensure t)
 (use-package which-key :init (which-key-mode) :config (setq which-key-idle-delay 0.8))
 
 ;; ✅ Active la fermeture automatique des parenthèses/accolades partout
@@ -64,23 +83,33 @@
   :config (global-company-mode)
   (setq company-idle-delay 0.1 company-minimum-prefix-length 1))
 
-;; 🗂️ Espaces de travail isolés par projet + sauvegarde sur disque
+;; 🗂️ Espaces de travail isolés par projet + sauvegarde/restauration propre
 (use-package perspective
   :ensure t
+  :demand t
   :custom
   (persp-mode-prefix-key (kbd "C-c M-p"))
   (persp-state-default-file (expand-file-name "persp-state" user-emacs-directory))
-  :init
-  (persp-mode)
+  (persp-suppress-no-prefix-key-warning t)
+  (persp-show-modestring nil)
   :config
-  ;; Sauvegarde automatique de l'état de tous les projets en quittant Emacs
-  (add-hook 'kill-emacs-hook #'persp-state-save))
+  (unless (bound-and-true-p persp-mode)
+    (persp-mode 1))
+  (defun my/persp-save-state ()
+    (when (bound-and-true-p persp-mode)
+      (ignore-errors (persp-state-save persp-state-default-file))))
+  (add-hook 'kill-emacs-hook #'my/persp-save-state)
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (when (file-exists-p persp-state-default-file)
+                (ignore-errors (persp-state-load persp-state-default-file))))))
 
 (use-package persp-projectile
   :ensure t
+  :demand t
   :after (perspective projectile)
-  :bind (:map projectile-command-map
-              ("p" . projectile-persp-switch-project)))
+  :config
+  (define-key projectile-command-map (kbd "p") #'projectile-persp-switch-project))
 
 ;; 📦 Package indispensable pour les snippets LSP (Flutter Widgets, etc.)
 (use-package yasnippet
@@ -106,6 +135,11 @@
 
   (setq lsp-enable-indentation nil)
   (setq lsp-enable-on-type-formatting nil)
+
+  (setq lsp-auto-guess-root t) ;; Plus de prompt "i ==> Import project root"
+  (define-key lsp-mode-map (kbd "C-c l n") #'lsp-rename)
+  (define-key lsp-mode-map (kbd "C-c l d") #'lsp-find-definition)
+  (define-key lsp-mode-map (kbd "C-c l r") #'lsp-find-references)
   
   ;; 🎨 FORCER LSP À LIRE BLADE ET TWIG COMME DU HTML
   (add-to-list 'lsp-language-id-configuration '("\\.blade\\.php\\'" . "html"))
@@ -124,12 +158,7 @@
    (make-lsp-client :new-connection (lsp-stdio-connection '("symfony-lsp"))
                     :major-modes '(php-mode php-ts-mode web-mode yaml-mode)
                     :add-on? t  ;; 👈 Permet de tourner en parallèle d'Intelephense et Twiggy sans les bloquer
-                    :server-id 'symfony-lsp))
-
-  ;; 🛑 DIRE A LSP D'IGNORER LES GROS DOSSIERS SYMFONY/LARAVEL
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]vendor\\'")
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]var\\'")
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]node_modules\\'"))
+                    :server-id 'symfony-lsp)))
 
 (use-package lsp-ui :hook (lsp-mode . lsp-ui-mode))
 
@@ -140,7 +169,7 @@
   :ensure t
   :init (setq lsp-tailwindcss-add-on-mode t)
   :config
-  (setq lsp-tailwindcss-major-modes '(web-mode php-mode html-mode css-mode)))
+  (setq lsp-tailwindcss-major-modes '(web-mode php-mode php-ts-mode html-mode css-mode js-ts-mode)))
 
 ;; PHP Mode (Base)
 (use-package php-mode :mode "\\.php\\'")
@@ -179,6 +208,7 @@
 
 ;; Composer
 (use-package composer
+  :ensure t
   :bind (:map php-mode-map ("C-c c c" . composer-install)))
 
 ;; Java
